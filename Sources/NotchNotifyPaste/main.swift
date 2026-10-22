@@ -52,8 +52,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func grantAccess() {
-        let key = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String
-        _ = AXIsProcessTrustedWithOptions([key: true] as CFDictionary)
+        // The string value of kAXTrustedCheckOptionPrompt (the constant itself trips Swift 6's checks).
+        _ = AXIsProcessTrustedWithOptions(["AXTrustedCheckOptionPrompt": true] as CFDictionary)
     }
 
     @objc private func toggleLogin() {
@@ -97,7 +97,10 @@ extension AppDelegate: NSMenuDelegate {
     }
 }
 
-let app = NSApplication.shared
-let delegate = AppDelegate()
-app.delegate = delegate
-app.run()
+// Top-level code is not main-actor isolated in Swift 5 mode, but it does run on the main thread.
+MainActor.assumeIsolated {
+    let app = NSApplication.shared
+    let delegate = AppDelegate()   // stays alive: run() below never returns
+    app.delegate = delegate
+    app.run()
+}

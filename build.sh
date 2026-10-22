@@ -11,8 +11,8 @@ VERSION="${VERSION:-1.0}"                # release.sh passes this in
 BUILD_NUMBER="$(date +%Y%m%d%H%M)"       # always increases, so macOS sees updates as newer
 cd "$(dirname "$0")"
 
-swift build -c release --arch arm64 --arch x86_64
-BIN="$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/NotchNotifyPaste"
+swift build -c release --arch arm64
+BIN="$(swift build -c release --arch arm64 --show-bin-path)/NotchNotifyPaste"
 
 APP="build/NotchNotify Paste.app"
 rm -rf build && mkdir -p "$APP/Contents/MacOS"
