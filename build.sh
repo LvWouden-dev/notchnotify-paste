@@ -1,6 +1,6 @@
 #!/bin/bash
 # Builds NotchNotify Paste.app, signs it with a Developer ID certificate, and zips it for hosting.
-# Notarization is a separate step (see README.md). Not tested yet.
+# Notarization is a separate step (see RELEASING.md). Not tested yet.
 #
 # Usage: ./build.sh "Developer ID Application: Your Name (TEAMID)"
 set -euo pipefail
@@ -37,4 +37,4 @@ EOF
 
 codesign --force --options runtime --timestamp --sign "$IDENTITY" "$APP"
 ditto -c -k --keepParent "$APP" "build/NotchNotifyPaste.zip"
-echo "Built build/NotchNotifyPaste.zip. Next: notarize and staple (README.md)."
+echo "Built build/NotchNotifyPaste.zip. Use release.sh to notarize and publish (RELEASING.md)."

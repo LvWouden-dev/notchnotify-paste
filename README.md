@@ -1,44 +1,31 @@
-# NotchNotify Paste (optional helper)
+# NotchNotify Paste
 
-A small menu bar app that presses ⌘V after NotchNotify has dictated text. It exists because the App Store version of NotchNotify is sandboxed and cannot use Accessibility. It is distributed outside the App Store, from your own site.
+Your dictation, pasted where you're typing.
 
-## How it works
+NotchNotify turns your speech into text on your Mac. On its own, it copies that text to your clipboard. NotchNotify Paste is a small, optional companion app that pastes it for you.
 
-1. NotchNotify copies the dictated text to the clipboard.
-2. If this helper is running, NotchNotify posts a notification named `com.notchnotify.paste.request` (no data).
-3. The helper presses ⌘V in the frontmost app. It never reads the clipboard.
+## [⬇ Download NotchNotify Paste](../../releases/latest/download/NotchNotifyPaste.dmg)
 
-NotchNotify only checks that the helper is installed and running. It never downloads or launches code that it fetched itself, which is what keeps the App Store version within the rules (guideline 2.5.2). The App Store version opens your download page in the browser; the user installs the helper.
+Free · macOS 14 or later · signed and notarized by Apple
 
-## Publish a new version (one command)
+## Install
 
-One-time setup:
+1. Open the downloaded file and drag **NotchNotify Paste** onto **Applications**.
+2. Open NotchNotify Paste from your Applications folder.
+3. When macOS asks, click **Open System Settings** and turn on NotchNotify Paste under **Accessibility**.
 
-1. A "Developer ID Application" certificate in your keychain (Xcode > Settings > Accounts > Manage Certificates > +).
-2. `xcrun notarytool store-credentials notchnotify --apple-id <you> --team-id <TEAMID>` (uses an app-specific password).
-3. `brew install gh`, then `gh auth login`, and create a GitHub repository for the helper.
-4. Add to `~/.zshrc`:
-   ```
-   export NOTCH_SIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)"
-   export NOTCH_NOTARY_PROFILE="notchnotify"
-   export NOTCH_GITHUB_REPO="yourname/notchnotify-paste"
-   ```
+That's it. A small cursor icon appears in your menu bar, and your next dictation is pasted automatically. To start it with your Mac, choose **Open at Login** from that icon.
 
-Each release: `./release.sh 1.1 "What changed"`. The link `https://github.com/<repo>/releases/latest/download/NotchNotifyPaste.zip` then serves the new version.
+## Why a separate app?
 
-## Build, sign, notarize by hand
+To press ⌘V for you, an app needs Accessibility access. Apps from the Mac App Store can't have that, so this one is a separate download.
 
-```
-./build.sh "Developer ID Application: Your Name (TEAMID)"
-xcrun notarytool submit build/NotchNotifyPaste.zip --keychain-profile "<profile>" --wait
-xcrun stapler staple "build/NotchNotify Paste.app"
-```
+It does one thing: when NotchNotify finishes a dictation, it presses ⌘V in the app you're using. It doesn't read your clipboard, record audio, or connect to the internet.
 
-Then re-zip the stapled app and host it. Put the page's address in `PasteCompanion.downloadURL` (in the NotchNotify project); until then the Download button stays off.
+## Remove it
 
-## Before shipping
+Click the menu bar icon and choose **Quit**, then move the app to the Trash. You can also remove it from System Settings › Privacy & Security › Accessibility.
 
-- Change `com.notchnotify.paste` to your own bundle identifier, in `build.sh` and in `PasteCompanion.swift`. They must match.
-- Untested: nothing here has been built or run. Check that the Accessibility prompt appears, that pasting works in several apps, and that "Open at Login" registers.
-- Any process can post the paste notification and trigger a ⌘V of the current clipboard. The impact is low, but decide whether that is acceptable.
-- Disclose the helper and its Accessibility use on the download page.
+---
+
+[All versions](../../releases) · Each release lists a SHA-256 checksum.
